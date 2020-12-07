@@ -51,9 +51,8 @@ bool RunCommandList(CommandList* command_list) {
                 } else {
                     if (command.output_stream != NULL) {
                         open_write_file(command.output_stream, command.append);
-                    } else {
-                        dup2(pipes[2 * i - 2], 0);
-                    }
+                    } 
+                    dup2(pipes[2 * i - 2], 0);
                 }
                 // Close pipes in every sub-child process
                 ClosePipes(pipes, 2 * (length - 1));
@@ -132,7 +131,6 @@ bool RunInputEmbedded(struct Command* command) {
 }
 
 void open_read_file(const char* input) {
-    printf("Input file : %s\n", input);
     int rf = open(input, O_RDONLY);
     if (rf == -1) {
         printf("File {%s} can't be opened\n", input);
@@ -147,7 +145,6 @@ void open_read_file(const char* input) {
 }
 
 void open_write_file(const char* output, bool append) {
-    printf("Output file : %s\n", output);
     int wf = open(output, O_WRONLY | O_CREAT | (append ? O_APPEND : O_TRUNC), 0666);
     if (wf == -1) {
         printf("File {%s} can't be opened\n", output);
