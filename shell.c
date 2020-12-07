@@ -17,7 +17,7 @@ int main() {
     // Is there a proper way to get a username?
     char* username  = "eduard@ml-dl-fanboy:~";
     char directory[BUFFER_SIZE];
-    const bool verbose = true;
+    const bool verbose = false;
     bool is_eof = false;
     bool exit_called = false;
     do {
