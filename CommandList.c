@@ -2,6 +2,7 @@
 
 struct CommandList CreateCommandList() {
     struct CommandList command_list;
+    command_list.background = false;
     command_list.list = CreateVector(DEFAULT_CONTAINER_SIZE, sizeof(struct Command));
     return command_list;
 }
