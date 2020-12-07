@@ -1,0 +1,1 @@
+gcc -Wall shell.c Command.c Vector.c DynamicString.c CommandList.c Parse.c globals.c CommandPipe.c Runner.c utils.c -o shell
