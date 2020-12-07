@@ -56,12 +56,16 @@ bool RunCommandList(CommandList* command_list) {
                 }
                 // Close pipes in every sub-child process
                 ClosePipes(pipes, 2 * (length - 1));
-                execvp(*(char**)command.tokens.storage, (char**)command.tokens.storage);
-                
-                dup2(std_output, 1);
-                printf("Failed to execute command on %d-th iteration\n", (i + 1));
-                fflush(stdout);
-                exit(1);
+                char* command_name = Command_GetToken(&command, 0);
+                if (!(strcmp(command_name, "exit") == 0 || strcmp(command_name, "cd") == 0)) {
+                    execvp(*(char**)command.tokens.storage, (char**)command.tokens.storage);
+                    dup2(std_output, 1);
+                    printf("Failed to execute command on %d-th iteration\n", (i + 1));
+                    fflush(stdout);
+                    exit(1);
+                } else { 
+                    exit(0);
+                }
             }
         }
         // Close pipes in child process
