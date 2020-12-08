@@ -74,15 +74,15 @@ int ParseRightArrow(CommandList* command_list, Command* command, int c) {
         c = getchar();
     }
     c = ParseWord(&single_argument, c);
-    if (append && single_argument.tokens.size != 1) {
-        printf("Number of arguments in '>>' redirection doesn't match : must be 1, but got %d\n", single_argument.tokens.size);
-    } else if (!append && single_argument.tokens.size != 1) {
-        printf("Number of arguments in '>' redirection doesn't match : must be 1, but got %d\n", single_argument.tokens.size);
-    } else {
+    bool got_error = single_argument.tokens.size != 1;
+    if (append && got_error) {
+        command->ERROR_MSG = "Wrong number of arguments in >> redirection";
+    } else if (!append && got_error) {
+        command->ERROR_MSG = "Wrong number of arguments in > redirection";
+    } else if (!got_error && command->ERROR_MSG == NULL) {
         command->output_stream = Command_GetToken(&single_argument, 0);
         command->append = append;
-        // printf("New output stream : {%s}\n", Command_GetToken(&single_argument, 0));
-    }
+    } 
     if (end_of_stream(c)) {
         CommandList_Push(command_list, command);
     }
@@ -95,9 +95,8 @@ int ParseLeftArrow(CommandList* command_list, Command* command, int c) {
     c = getchar();
     c = ParseWord(&single_argument, c);
     if (single_argument.tokens.size != 1) {
-        printf("Number of arguments in '<' redirection doesn't match : must be 1, but got %d\n", single_argument.tokens.size);
+        command->ERROR_MSG = "Wrong number of arguments in < redirection";
     } else {
-        // printf("New input stream : {%s}\n", Command_GetToken(&single_argument, 0));
         command -> input_stream = Command_GetToken(&single_argument, 0);
     }
     if (end_of_stream(c)) {
